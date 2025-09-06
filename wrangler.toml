@@ -1,0 +1,5 @@
+name = "spataro-home-improvements"
+compatibility_date = "2025-09-06"
+
+[site]
+bucket = "."
