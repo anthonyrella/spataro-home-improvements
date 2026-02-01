@@ -6,10 +6,11 @@
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    line-height: 1.6;
+    font-family: 'Roboto', 'Arial', sans-serif;
+    line-height: 1.5;
     color: #333;
     overflow-x: hidden;
+    font-weight: 400;
 }
 
 .container {
@@ -178,13 +179,15 @@ body {
 .btn {
     padding: 15px 30px;
     border: none;
-    border-radius: 50px;
+    border-radius: 4px;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 500;
     text-decoration: none;
     display: inline-block;
     transition: all 0.3s ease;
     cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .btn-primary {
@@ -220,8 +223,8 @@ body {
 .hero-img {
     max-width: 100%;
     height: auto;
-    border-radius: 15px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
 }
 
@@ -232,7 +235,7 @@ body {
 .placeholder-image {
     background: rgba(139, 69, 19, 0.1);
     border: 2px dashed rgba(139, 69, 19, 0.3);
-    border-radius: 15px;
+    border-radius: 4px;
     padding: 3rem;
     text-align: center;
     min-height: 300px;
@@ -263,9 +266,12 @@ body {
 
 .services h2 {
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     margin-bottom: 3rem;
     color: #2c3e50;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .services-grid {
@@ -279,11 +285,12 @@ body {
 .service-card {
     background: white;
     padding: 3rem;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-top: 4px solid #9dadb7;
     min-height: 400px;
+    border: 1px solid #e0e0e0;
 }
 
 .service-card:hover {
@@ -295,7 +302,7 @@ body {
     width: 60px;
     height: 60px;
     background: linear-gradient(135deg, #9dadb7, #654321);
-    border-radius: 50%;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -308,9 +315,12 @@ body {
 }
 
 .service-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     margin-bottom: 1rem;
     color: #2c3e50;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .service-card p {
@@ -351,9 +361,12 @@ body {
 }
 
 .about-text h2 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     margin-bottom: 1.5rem;
     color: #2c3e50;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .about-text p {
@@ -393,9 +406,12 @@ body {
 
 .gallery h2 {
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     margin-bottom: 1rem;
     color: #2c3e50;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .gallery > .container > p {
@@ -413,9 +429,10 @@ body {
 
 .gallery-item {
     aspect-ratio: 4/3;
-    border-radius: 15px;
+    border-radius: 4px;
     overflow: hidden;
     transition: transform 0.3s ease;
+    border: 1px solid #e0e0e0;
 }
 
 .gallery-item:hover {
@@ -446,9 +463,12 @@ body {
 
 .contact h2 {
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     margin-bottom: 1rem;
     color: #2c3e50;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .contact > .container > p {
@@ -520,7 +540,8 @@ body {
 .contact-form {
     background: #F5F5F5;
     padding: 2rem;
-    border-radius: 15px;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
 }
 
 .form-group {
@@ -533,10 +554,11 @@ body {
     width: 100%;
     padding: 1rem;
     border: 2px solid #E1E1E1;
-    border-radius: 10px;
+    border-radius: 4px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
     font-family: inherit;
+    background: white;
 }
 
 .form-group input:focus,
