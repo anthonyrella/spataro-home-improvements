@@ -23,10 +23,10 @@ window.addEventListener('scroll', () => {
     
     // Navbar background change
     if (scrollY > 100) {
-        navbar.style.background = 'rgba(225, 225, 225, 0.98)';
+        // navbar.style.background = 'rgba(225, 225, 225, 0.98)';
         navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
     } else {
-        navbar.style.background = 'rgba(225, 225, 225, 0.95)';
+        // navbar.style.background = 'rgba(225, 225, 225, 0.95)';
         navbar.style.boxShadow = 'none';
     }
     
@@ -152,13 +152,95 @@ document.querySelectorAll('.service-card').forEach(card => {
     });
 });
 
-// Gallery items click handler (for future lightbox functionality)
-document.querySelectorAll('.gallery-item').forEach(item => {
-    item.addEventListener('click', function() {
-        // Placeholder for future lightbox functionality
-        console.log('Gallery item clicked - lightbox would open here');
+// Gallery lightbox
+(function() {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox && lightbox.querySelector('.lightbox-img');
+    const lightboxClose = lightbox && lightbox.querySelector('.lightbox-close');
+    const lightboxPrev = lightbox && lightbox.querySelector('.lightbox-prev');
+    const lightboxNext = lightbox && lightbox.querySelector('.lightbox-next');
+
+    if (!lightbox || !lightboxImg) return;
+
+    const galleryItems = document.querySelectorAll('.gallery-item img');
+    const sources = Array.from(galleryItems).map(img => ({ src: img.src, alt: img.alt || '' }));
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+        currentIndex = index;
+        lightboxImg.src = sources[index].src;
+        lightboxImg.alt = sources[index].alt;
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    function showPrev() {
+        currentIndex = (currentIndex - 1 + sources.length) % sources.length;
+        lightboxImg.src = sources[currentIndex].src;
+        lightboxImg.alt = sources[currentIndex].alt;
+    }
+
+    function showNext() {
+        currentIndex = (currentIndex + 1) % sources.length;
+        lightboxImg.src = sources[currentIndex].src;
+        lightboxImg.alt = sources[currentIndex].alt;
+    }
+
+    galleryItems.forEach((img, index) => {
+        img.closest('.gallery-item').addEventListener('click', () => openLightbox(index));
     });
-});
+
+    lightboxClose.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('is-open')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'ArrowRight') showNext();
+    });
+
+    if (lightboxPrev) lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+    if (lightboxNext) lightboxNext.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+})();
+
+// Service row mobile: tap bar to expand overlay, close button to collapse (only on narrow viewports)
+(function() {
+    var MOBILE_MAX = 768;
+
+    function isMobile() {
+        return window.innerWidth <= MOBILE_MAX;
+    }
+
+    document.querySelectorAll('.service-row').forEach(function(row) {
+        var content = row.querySelector('.service-row-content');
+        var closeBtn = row.querySelector('.service-details-close');
+        if (!content) return;
+
+        content.addEventListener('click', function(e) {
+            if (closeBtn && e.target === closeBtn) return;
+            if (!isMobile()) return;
+            if (row.classList.contains('service-row--expanded')) return;
+            row.classList.add('service-row--expanded');
+            document.body.style.overflow = 'hidden';
+        });
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                row.classList.remove('service-row--expanded');
+                document.body.style.overflow = '';
+            });
+        }
+    });
+})();
 
 // Phone input removed with contact form
 
@@ -228,7 +310,7 @@ function createScrollToTopButton() {
     
     // Hover effects
     scrollBtn.addEventListener('mouseenter', () => {
-        scrollBtn.style.background = '#654321';
+        scrollBtn.style.background = '#8B4513';
         scrollBtn.style.transform = 'scale(1.1)';
     });
     
