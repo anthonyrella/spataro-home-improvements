@@ -104,66 +104,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Contact form removed - using direct phone/email links instead
-
-// Notification system
-function showNotification(message, type = 'info') {
-    // Remove existing notifications
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
-    }
-    
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <span class="notification-message">${message}</span>
-            <button class="notification-close">&times;</button>
-        </div>
-    `;
-    
-    // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: ${type === 'success' ? '#8B4513' : type === 'error' ? '#e74c3c' : '#E1E1E1'};
-        color: ${type === 'success' ? 'white' : type === 'error' ? 'white' : '#2c3e50'};
-        padding: 1rem 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        z-index: 10000;
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
-        max-width: 400px;
-    `;
-    
-    // Add to page
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Close button functionality
-    const closeBtn = notification.querySelector('.notification-close');
-    closeBtn.addEventListener('click', () => {
-        notification.style.transform = 'translateX(400px)';
-        setTimeout(() => notification.remove(), 300);
-    });
-    
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.style.transform = 'translateX(400px)';
-            setTimeout(() => notification.remove(), 300);
-        }
-    }, 5000);
-}
-
 // Intersection Observer for animations
 const observerOptions = {
     threshold: 0.1,
@@ -179,15 +119,14 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe elements for animation
 document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll('.service-card, .gallery-item, .contact-item');
-    animatedElements.forEach(el => {
+    document.querySelectorAll('.service-card, .gallery-item, .contact-item').forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
         el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         observer.observe(el);
     });
+    createScrollToTopButton();
 });
 
 // Service cards hover effect enhancement
@@ -351,28 +290,6 @@ document.querySelectorAll('.service-card').forEach(card => {
     });
 })();
 
-// Phone input removed with contact form
-
-// Lazy loading for images (when real images are added)
-function lazyLoadImages() {
-    const images = document.querySelectorAll('img[data-src]');
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                imageObserver.unobserve(img);
-            }
-        });
-    });
-    
-    images.forEach(img => imageObserver.observe(img));
-}
-
-// Initialize lazy loading
-document.addEventListener('DOMContentLoaded', lazyLoadImages);
-
 // Scroll to top functionality
 function createScrollToTopButton() {
     const scrollBtn = document.createElement('button');
@@ -429,38 +346,6 @@ function createScrollToTopButton() {
     });
 }
 
-// Initialize scroll to top button
-document.addEventListener('DOMContentLoaded', createScrollToTopButton);
-
-// Add loading state to form submission
-function addLoadingState(form) {
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-    
-    // Reset after 3 seconds (simulating API call)
-    setTimeout(() => {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
-    }, 3000);
-}
-
-// Enhanced form submission with loading state
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        addLoadingState(this);
-        
-        // Rest of the form handling logic...
-        setTimeout(() => {
-            showNotification('Thank you! Your message has been sent. We\'ll get back to you soon.', 'success');
-            this.reset();
-        }, 3000);
-    });
-}
-
 // Add some interactive elements to service cards
 document.querySelectorAll('.service-card').forEach(card => {
     const icon = card.querySelector('.service-icon i');
@@ -474,25 +359,3 @@ document.querySelectorAll('.service-card').forEach(card => {
         icon.style.transform = 'scale(1)';
     });
 });
-
-// Phone and Email App Functions
-function openPhoneApp() {
-    // The tel: link will automatically open the phone app
-    // This function can be used for additional logic if needed
-    console.log('Opening phone app for 905-955-8872');
-}
-
-function openEmailApp() {
-    // The mailto: link will automatically open the email app
-    // This function can be used for additional logic if needed
-    console.log('Opening email app for marco@spatarohome.ca');
-}
-
-// Console welcome message
-console.log(`
-🚀 Spataro Home Improvements Website
-📧 Contact: marco@spatarohome.ca
-📞 Phone: 905-955-8872
-📍 Service Area: York Region, Ontario
-🎨 Brand Color: #E1E1E1
-`);

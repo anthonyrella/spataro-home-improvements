@@ -1,8 +1,47 @@
-/* Reset and Base Styles */
+/**
+ * Spataro Home Improvements — site stylesheet
+ * =============================================================================
+ * HOW THIS FILE IS ORGANIZED
+ * Read from top to bottom. Cascade matters: rules that appear later override
+ * earlier ones when selectors have the same specificity. Media queries at the
+ * bottom of the file progressively adjust layout for narrower viewports.
+ *
+ * TABLE OF CONTENTS
+ *   1. Foundation      — Reset, html/body defaults, .container
+ *   2. Header & nav    — Fixed header, frosted bar, desktop links, hamburger
+ *   3. Hero & buttons  — Full-viewport hero, primary/secondary CTAs
+ *   4. Services        — Stacked rows; image + overlapping card; mobile expand
+ *   5. About           — Two-column story + team photos
+ *   6. Gallery         — Responsive grid; opens lightbox (see script.js)
+ *   7. Lightbox        — Full-screen image viewer controls
+ *   8. Contact         — Phone, email, Instagram, service area grid
+ *   9. Footer          — Brand, lists, copyright
+ *  10. Media queries   — max-width: 1200px, 1024px, 768px, 480px (+ reduced motion)
+ *  11. Motion & polish — @keyframes, fade-in on cards, icon hover effects
+ *
+ * SCRIPT COUPLING (script.js)
+ *   - Toggles .navbar--past-hero and .nav-logo-img.scrolled on scroll
+ *   - Sets --site-header-height for mobile drawer top alignment
+ *   - Service row tap-to-expand and lightbox behavior
+ * =============================================================================
+ */
+
+/* =============================================================================
+   1. FOUNDATION
+   -----------------------------------------------------------------------------
+   Universal border-box sizing, base typography (Roboto stack), horizontal scroll
+   clamp on body, and shared .container (max-width 1200px, horizontal padding).
+   Smooth scrolling applies to anchor links site-wide.
+   ============================================================================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -19,7 +58,19 @@ body {
     padding: 0 20px;
 }
 
-/* Navigation */
+/* =============================================================================
+   2. HEADER & NAVIGATION
+   -----------------------------------------------------------------------------
+   .site-header: fixed shell (z-index 1000) wrapping <nav> and the <ul> menu.
+   The menu is a *sibling* of .navbar (not nested) so its backdrop-filter does
+   not stack inside the bar’s blur (see project history).
+
+   .navbar: frosted strip over the hero; .navbar--past-hero (JS) switches to
+   solid #F5F5F5 after the hero scrolls away.
+
+   Desktop: .nav-menu is position absolute, right-aligned to the 1200px column.
+   Mobile overrides live in section 10 (max-width: 768px): drawer, safe-area, --site-header-height.
+   ============================================================================= */
 .site-header {
     position: fixed;
     top: 0;
@@ -53,17 +104,10 @@ body {
     min-height: 80px;
 }
 
-.nav-logo h2 {
-    color: #2c3e50;
-    font-weight: 700;
-    font-size: 1.5rem;
-}
-
 .nav-logo-img {
     position: absolute;
     left: 40%;
     top: 5%;
-    /* transform: translateX(-50%); */
     width: 200px;
     height: auto;
     transition: all 0.3s ease;
@@ -100,6 +144,7 @@ body {
     position: relative;
 }
 
+/* Desktop-only: after hero, nav links use brand blue (see .nav-link base for in-hero color). */
 @media (min-width: 769px) {
     nav.navbar.navbar--past-hero + .nav-menu .nav-link {
         color: #2c3e50;
@@ -141,7 +186,16 @@ body {
     transition: 0.3s;
 }
 
-/* Hero Section */
+/* =============================================================================
+   3. HERO & PRIMARY BUTTONS
+   -----------------------------------------------------------------------------
+   Full-viewport hero with fixed-parallax background (background-attachment:
+   fixed — may be reduced on some mobile browsers). Negative margin-top pulls
+   content under the fixed header. .btn-* are shared by hero CTAs and elsewhere.
+   .hero-image / .hero-img / .placeholder-image: utility blocks if a split hero
+   layout with a separate image column is used.
+   ============================================================================= */
+
 .hero {
     min-height: 100vh;
     display: flex;
@@ -189,12 +243,6 @@ body {
     gap: 1rem;
     flex-wrap: wrap;
     animation: slideInLeft 1s ease-out 0.6s both;
-}
-
-.hero-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
 }
 
 .btn {
@@ -279,7 +327,18 @@ body {
     color: #2c3e50;
 }
 
-/* Services Section */
+/* =============================================================================
+   4. SERVICES
+   -----------------------------------------------------------------------------
+   Vertical stack of .service-row blocks. Desktop: full-bleed image with a
+   white .service-card overlapping left or right (.service-row--card-left /
+   --card-right). .service-row-media uses display:contents on desktop so the
+   image and content participate in the row grid flow.
+
+   Mobile (section 10): .service-row-media becomes a real box; tap the bottom bar to
+   expand .service-card-body; script.js adjusts row min-height when expanded.
+   ============================================================================= */
+
 .services {
     padding: 100px 0 120px;
     background: #F5F5F5;
@@ -306,7 +365,7 @@ body {
     gap: 4rem;
 }
 
-/* Each service = full-width image with card overlapping on top */
+/* One row: background image + overlapping white card (desktop). */
 .service-row {
     position: relative;
     min-height: 420px;
@@ -315,11 +374,12 @@ body {
     padding: 0;
 }
 
-/* Wrapper for mobile image+bar; invisible to desktop layout */
+/* display:contents (desktop) = children slot into parent; block (mobile) = card stack. */
 .service-row-media {
     display: contents;
 }
 
+/* Unwrap head/body for desktop overlap; mobile (10c) sets display:block on both. */
 .service-card-head,
 .service-card-body {
     display: contents;
@@ -341,7 +401,7 @@ body {
     display: block;
 }
 
-/* Card overlaps on top of image - alternating left/right */
+/* Flex row positions .service-card left or right per modifiers below. */
 .service-row-content {
     position: relative;
     z-index: 2;
@@ -355,10 +415,6 @@ body {
     justify-content: flex-start;
     padding-left: 0;
     margin-left: -5rem;
-}
-
-.service-row--card-left .service-card {
-    /* text-align: right; */
 }
 
 .service-row--card-right .service-row-content {
@@ -434,7 +490,7 @@ body {
     font-weight: bold;
 }
 
-/* Service details close + tap hint (mobile) */
+/* Shown only in mobile expanded state (breakpoint 10c); tap hint on collapsed bar. */
 .service-details-close {
     display: none;
 }
@@ -443,7 +499,14 @@ body {
     display: none;
 }
 
-/* About Section */
+/* =============================================================================
+   5. ABOUT
+   -----------------------------------------------------------------------------
+   Two-column grid: copy + feature checklist, and .team-photos (Marco + team).
+   Wide screens: overlapping absolute-positioned photos. ≤1200px: second image
+   (.team-photo-desktop-only) hidden; single centered photo (see section 10).
+   ============================================================================= */
+
 .about {
     padding: 100px 0;
     background: linear-gradient(
@@ -548,7 +611,14 @@ body {
     color: #2c3e50;
 }
 
-/* Gallery Section */
+/* =============================================================================
+   6. GALLERY
+   -----------------------------------------------------------------------------
+   Auto-fit minmax grid of .gallery-item; images are object-fit cover. Click
+   opens #lightbox (controlled in script.js). .placeholder-image rules support
+   optional placeholder tiles if used in markup.
+   ============================================================================= */
+
 .gallery {
     padding: 100px 0;
     background: #F5F5F5;
@@ -613,7 +683,13 @@ body {
     color: #9dadb7;
 }
 
-/* Lightbox */
+/* =============================================================================
+   7. LIGHTBOX
+   -----------------------------------------------------------------------------
+   Fixed overlay (#lightbox) below nav z-index. .is-open toggled by JS; prev/
+   next/close are absolutely positioned. Image is max 95vh for letterboxing.
+   ============================================================================= */
+
 .lightbox {
     position: fixed;
     inset: 0;
@@ -703,7 +779,13 @@ body {
     background: rgba(255, 255, 255, 0.25);
 }
 
-/* Contact Section */
+/* =============================================================================
+   8. CONTACT
+   -----------------------------------------------------------------------------
+   Centered .contact-info with a 2×2 .contact-grid of phone, email, Instagram,
+   service area. Links use brand accent colors; no form — tel/mailto only.
+   ============================================================================= */
+
 .contact {
     padding: 100px 0;
     background: white;
@@ -780,43 +862,12 @@ body {
     color: #8B4513;
 }
 
-.contact-form {
-    background: #F5F5F5;
-    padding: 2rem;
-    border-radius: 4px;
-    border: 1px solid #e0e0e0;
-}
+/* =============================================================================
+   9. FOOTER
+   -----------------------------------------------------------------------------
+   Dark band (#2c3e50): multi-column .footer-content, then .footer-bottom rule.
+   ============================================================================= */
 
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 1rem;
-    border: 2px solid #E1E1E1;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-    font-family: inherit;
-    background: white;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #9dadb7;
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 120px;
-}
-
-/* Footer */
 .footer {
     background: #2c3e50;
     color: white;
@@ -857,7 +908,19 @@ body {
     color: #bdc3c7;
 }
 
-/* Responsive Design */
+/* =============================================================================
+   10. RESPONSIVE BREAKPOINTS
+   -----------------------------------------------------------------------------
+   max-width: 1200px — Hide overlapping team shot; simplify about photos.
+   max-width: 1024px — Tighter service rows (image insets, shorter min-heights).
+   max-width: 768px — Mobile nav drawer, hero stack, services as tap-expand cards,
+                       gallery 2 columns, contact/features single column.
+   max-width: 480px — Tighter nav/hero/type; smallest service card titles.
+
+   Nested inside 768px: prefers-reduced-motion shortens service panel transition.
+   ============================================================================= */
+
+/* --- 10a. ≤1200px: about team layout --- */
 @media (max-width: 1200px) {
     .team-photo-desktop-only {
         display: none;
@@ -878,6 +941,7 @@ body {
     }
 }
 
+/* --- 10b. ≤1024px: service row density --- */
 @media (max-width: 1024px) {
     .service-row {
         min-height: 360px;
@@ -902,12 +966,14 @@ body {
     }
 }
 
+/* --- 10c. ≤768px: mobile navigation, section stacks, service overlays --- */
 @media (max-width: 768px) {
     .site-header {
         padding-top: env(safe-area-inset-top, 0px);
     }
 
-    /* Keep drawer under the bar + centered logo so open menu does not cover them */
+    /* Drawer z-index: entire .navbar (logo + bar) above .nav-menu so the open panel
+       does not paint over the centered logo; see script --site-header-height. */
     nav.navbar {
         position: relative;
         z-index: 1002;
@@ -971,7 +1037,7 @@ body {
             -webkit-backdrop-filter 0.3s ease, padding-top 0.3s ease;
     }
 
-    /* After scroll: logo moves to corner (see script.js .scrolled) */
+    /* Compact header: once .nav-logo-img.scrolled (script.js, scroll > 50px). */
     nav.navbar:has(.nav-logo-img.scrolled) + .nav-menu.active {
         padding-top: 1rem;
     }
@@ -1063,7 +1129,7 @@ body {
         padding: 2rem;
     }
 
-    /* Mobile: image + bar in media; expanded details below image (not over it) */
+    /* Services: image + bottom bar live in .service-row-media; body expands below. */
     .service-row-media {
         display: block;
         position: relative;
@@ -1298,6 +1364,7 @@ body {
     }
 }
 
+/* --- 10d. ≤480px: smallest phones --- */
 @media (max-width: 480px) {
     .navbar {
         padding: 1rem 0;
@@ -1354,12 +1421,16 @@ body {
     }
 }
 
-/* Smooth Scrolling */
-html {
-    scroll-behavior: smooth;
-}
+/* =============================================================================
+   11. SCROLL ANIMATIONS, KEYFRAMES & HOVER POLISH
+   -----------------------------------------------------------------------------
+   .service-card, .gallery-item, .contact-item: initial fadeInUp (CSS) plus
+   intersection observer in script.js fades them in on scroll (dual animation —
+   intentional). Keyframes: fadeInUp, pulse (icon), slideInLeft (hero).
 
-/* Loading Animation */
+   Service icon hover: scale + pulse on .service-card:hover.
+   ============================================================================= */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -1371,13 +1442,13 @@ html {
     }
 }
 
+/* Entry animation on load (complements JS IntersectionObserver on same selectors). */
 .service-card,
 .gallery-item,
 .contact-item {
     animation: fadeInUp 0.6s ease-out;
 }
 
-/* Hover Effects */
 .service-card:hover .service-icon {
     transform: scale(1.1);
     transition: transform 0.3s ease;
@@ -1399,6 +1470,7 @@ html {
     }
 }
 
+/* Hero headline / subcopy / buttons — staggered via animation-delay on each rule. */
 @keyframes slideInLeft {
     0% {
         opacity: 0;
@@ -1408,9 +1480,4 @@ html {
         opacity: 1;
         transform: translateX(0);
     }
-}
-
-.contact-form:hover {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
 }
