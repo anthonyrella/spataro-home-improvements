@@ -12,30 +12,35 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <img src="img/logo3.png" alt="Spataro Home Improvements Logo" class="nav-logo-img">
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="#home" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#services" class="nav-link">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#gallery" class="nav-link">Gallery</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#contact" class="nav-link">Contact</a>
-                </li>
-            </ul>
-            <div class="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+    <header class="site-header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <img src="img/logo3.png" alt="Spataro Home Improvements Logo" class="nav-logo-img">
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#home" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="#services" class="nav-link">Services</a>
+            </li>
+            <li class="nav-item">
+                <a href="#about" class="nav-link">About</a>
+            </li>
+            <li class="nav-item">
+                <a href="#gallery" class="nav-link">Gallery</a>
+            </li>
+            <li class="nav-item">
+                <a href="#contact" class="nav-link">Contact</a>
+            </li>
+        </ul>
+    </header>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
@@ -56,97 +61,121 @@
             <div class="services-rows">
                 <!-- 1. Custom Tile - card left, image full -->
                 <div class="service-row service-row--card-left">
-                    <div class="service-row-image">
-                        <img src="img/floor_tile_marble.jpg" alt="Custom tile installation - marble floor">
-                    </div>
-                    <div class="service-row-content">
-                        <button type="button" class="service-details-close" aria-label="Close details">&times;</button>
-                        <div class="service-card">
-                            <div class="service-icon">
-                                <i class="fas fa-th-large"></i>
+                    <div class="service-row-media">
+                        <div class="service-row-image">
+                            <img src="img/floor_tile_marble.jpg" alt="Custom tile installation - marble floor">
+                        </div>
+                        <div class="service-row-content">
+                            <button type="button" class="service-details-close" aria-label="Close details">&times;</button>
+                            <div class="service-card">
+                                <div class="service-card-head">
+                                    <div class="service-icon">
+                                        <i class="fas fa-th-large"></i>
+                                    </div>
+                                    <h3>Custom Tile Installation</h3>
+                                    <span class="service-tap-hint">Tap for details</span>
+                                </div>
+                                <div class="service-card-body">
+                                    <p>From large format tile to intricate mosaic patterns. We specialize in bathrooms, kitchens, and exterior tile installations with precision and artistry.</p>
+                                    <ul>
+                                        <li>Large format tile installation</li>
+                                        <li>Mosaic patterns</li>
+                                        <li>Bathroom & kitchen tile</li>
+                                        <li>Exterior tile work</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <h3>Custom Tile Installation</h3>
-                            <span class="service-tap-hint">Tap for details</span>
-                            <p>From large format tile to intricate mosaic patterns. We specialize in bathrooms, kitchens, and exterior tile installations with precision and artistry.</p>
-                            <ul>
-                                <li>Large format tile installation</li>
-                                <li>Mosaic patterns</li>
-                                <li>Bathroom & kitchen tile</li>
-                                <li>Exterior tile work</li>
-                            </ul>
                         </div>
                     </div>
                 </div>
 
                 <!-- 2. Bathroom - card right -->
                 <div class="service-row service-row--card-right">
-                    <div class="service-row-image">
-                        <img src="img/shower_complete.jpg" alt="Bathroom renovation - completed shower">
-                    </div>
-                    <div class="service-row-content">
-                        <button type="button" class="service-details-close" aria-label="Close details">&times;</button>
-                        <div class="service-card">
-                            <div class="service-icon">
-                                <i class="fas fa-bath"></i>
+                    <div class="service-row-media">
+                        <div class="service-row-image">
+                            <img src="img/shower_complete.jpg" alt="Bathroom renovation - completed shower">
+                        </div>
+                        <div class="service-row-content">
+                            <button type="button" class="service-details-close" aria-label="Close details">&times;</button>
+                            <div class="service-card">
+                                <div class="service-card-head">
+                                    <div class="service-icon">
+                                        <i class="fas fa-bath"></i>
+                                    </div>
+                                    <h3>Bathroom Renovation</h3>
+                                    <span class="service-tap-hint">Tap for details</span>
+                                </div>
+                                <div class="service-card-body">
+                                    <p>Complete bathroom transformations from demo to paint. Whether you need a professional tile setter or a full renovation contractor, we handle it all.</p>
+                                    <ul>
+                                        <li>Tub to shower conversion</li>
+                                        <li>Curb-less shower builds</li>
+                                        <li>Heated floors</li>
+                                        <li>Steam showers</li>
+                                        <li>Complete renovations</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <h3>Bathroom Renovation</h3>
-                            <span class="service-tap-hint">Tap for details</span>
-                            <p>Complete bathroom transformations from demo to paint. Whether you need a professional tile setter or a full renovation contractor, we handle it all.</p>
-                            <ul>
-                                <li>Tub to shower conversion</li>
-                                <li>Curb-less shower builds</li>
-                                <li>Heated floors</li>
-                                <li>Steam showers</li>
-                                <li>Complete renovations</li>
-                            </ul>
                         </div>
                     </div>
                 </div>
 
                 <!-- 3. Kitchen - card left -->
                 <div class="service-row service-row--card-left">
-                    <div class="service-row-image">
-                        <img src="img/fireplace_tv_brick.jpg" alt="Main floor and kitchen renovation">
-                    </div>
-                    <div class="service-row-content">
-                        <button type="button" class="service-details-close" aria-label="Close details">&times;</button>
-                        <div class="service-card">
-                            <div class="service-icon">
-                                <i class="fas fa-utensils"></i>
+                    <div class="service-row-media">
+                        <div class="service-row-image">
+                            <img src="img/fireplace_tv_brick.jpg" alt="Main floor and kitchen renovation">
+                        </div>
+                        <div class="service-row-content">
+                            <button type="button" class="service-details-close" aria-label="Close details">&times;</button>
+                            <div class="service-card">
+                                <div class="service-card-head">
+                                    <div class="service-icon">
+                                        <i class="fas fa-utensils"></i>
+                                    </div>
+                                    <h3>Main Floor & Kitchen Renovations</h3>
+                                    <span class="service-tap-hint">Tap for details</span>
+                                </div>
+                                <div class="service-card-body">
+                                    <p>Transform your main floor into the ultimate entertainment space. Our expert kitchen design team can remove walls to create open concept living areas.</p>
+                                    <ul>
+                                        <li>Kitchen design & renovation</li>
+                                        <li>Open concept transformations</li>
+                                        <li>Wall removal & structural work</li>
+                                        <li>Main floor renovations</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <h3>Main Floor & Kitchen Renovations</h3>
-                            <span class="service-tap-hint">Tap for details</span>
-                            <p>Transform your main floor into the ultimate entertainment space. Our expert kitchen design team can remove walls to create open concept living areas.</p>
-                            <ul>
-                                <li>Kitchen design & renovation</li>
-                                <li>Open concept transformations</li>
-                                <li>Wall removal & structural work</li>
-                                <li>Main floor renovations</li>
-                            </ul>
                         </div>
                     </div>
                 </div>
 
                 <!-- 4. Basement - card right -->
                 <div class="service-row service-row--card-right">
-                    <div class="service-row-image">
-                        <img src="img/outdoor_stairs_landing.jpg" alt="Basement finishing - stairs and landing">
-                    </div>
-                    <div class="service-row-content">
-                        <button type="button" class="service-details-close" aria-label="Close details">&times;</button>
-                        <div class="service-card">
-                            <div class="service-icon">
-                                <i class="fas fa-building"></i>
+                    <div class="service-row-media">
+                        <div class="service-row-image">
+                            <img src="img/outdoor_stairs_landing.jpg" alt="Basement finishing - stairs and landing">
+                        </div>
+                        <div class="service-row-content">
+                            <button type="button" class="service-details-close" aria-label="Close details">&times;</button>
+                            <div class="service-card">
+                                <div class="service-card-head">
+                                    <div class="service-icon">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                    <h3>Basement Finishing/Renovation</h3>
+                                    <span class="service-tap-hint">Tap for details</span>
+                                </div>
+                                <div class="service-card-body">
+                                    <p>Increase your property value or create additional income with our basement transformation services. From rental units to entertainment spaces.</p>
+                                    <ul>
+                                        <li>Basement apartments</li>
+                                        <li>Rental unit creation</li>
+                                        <li>Entertainment spaces</li>
+                                        <li>Property value enhancement</li>
+                                    </ul>
+                                </div>
                             </div>
-                            <h3>Basement Finishing/Renovation</h3>
-                            <span class="service-tap-hint">Tap for details</span>
-                            <p>Increase your property value or create additional income with our basement transformation services. From rental units to entertainment spaces.</p>
-                            <ul>
-                                <li>Basement apartments</li>
-                                <li>Rental unit creation</li>
-                                <li>Entertainment spaces</li>
-                                <li>Property value enhancement</li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -155,7 +184,7 @@
     </section>
 
     <!-- About Section -->
-    <section class="about">
+    <section id="about" class="about">
         <div class="container">
             <div class="about-content">
                 <div class="about-text">

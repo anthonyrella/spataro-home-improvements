@@ -1,44 +1,93 @@
 // Mobile Navigation Toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
+const siteHeader = document.querySelector('.site-header');
 
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
-});
+function updateMobileSiteHeaderHeight() {
+    if (!siteHeader) return;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+        const h = siteHeader.getBoundingClientRect().height;
+        document.documentElement.style.setProperty(
+            '--site-header-height',
+            `${Math.ceil(h)}px`
+        );
+    } else {
+        document.documentElement.style.removeProperty('--site-header-height');
+    }
+}
+
+if (siteHeader && typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(() => updateMobileSiteHeaderHeight()).observe(siteHeader);
+}
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', updateMobileSiteHeaderHeight);
+}
+
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+        requestAnimationFrame(updateMobileSiteHeaderHeight);
+    });
+}
 
 // Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
-    hamburger.classList.remove('active');
-    navMenu.classList.remove('active');
+    if (hamburger) hamburger.classList.remove('active');
+    if (navMenu) navMenu.classList.remove('active');
 }));
 
 // Logo scroll functionality
 const logo = document.querySelector('.nav-logo-img');
+const navbar = document.querySelector('.navbar');
+const heroSection = document.querySelector('.hero');
 let isScrolled = false;
 
-window.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    const scrollY = window.scrollY;
-    
-    // Navbar background change
-    if (scrollY > 100) {
-        // navbar.style.background = 'rgba(225, 225, 225, 0.98)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+function updateNavbarPastHero() {
+    if (!navbar || !heroSection) return;
+    const heroBottom =
+        heroSection.getBoundingClientRect().bottom + window.scrollY;
+    if (window.scrollY >= heroBottom) {
+        navbar.classList.add('navbar--past-hero');
     } else {
-        // navbar.style.background = 'rgba(225, 225, 225, 0.95)';
-        navbar.style.boxShadow = 'none';
+        navbar.classList.remove('navbar--past-hero');
     }
-    
-    // Logo size change
-    if (scrollY > 50 && !isScrolled) {
-        logo.classList.add('scrolled');
-        isScrolled = true;
-    } else if (scrollY <= 50 && isScrolled) {
-        logo.classList.remove('scrolled');
-        isScrolled = false;
+}
+
+function onScrollNav() {
+    const scrollY = window.scrollY;
+
+    updateNavbarPastHero();
+
+    if (navbar) {
+        if (scrollY > 100) {
+            navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+        } else {
+            navbar.style.boxShadow = 'none';
+        }
     }
+
+    if (logo) {
+        if (scrollY > 50 && !isScrolled) {
+            logo.classList.add('scrolled');
+            isScrolled = true;
+            updateMobileSiteHeaderHeight();
+        } else if (scrollY <= 50 && isScrolled) {
+            logo.classList.remove('scrolled');
+            isScrolled = false;
+            updateMobileSiteHeaderHeight();
+        }
+    }
+}
+
+window.addEventListener('scroll', onScrollNav);
+window.addEventListener('resize', () => {
+    updateNavbarPastHero();
+    updateMobileSiteHeaderHeight();
 });
+updateMobileSiteHeaderHeight();
+onScrollNav();
 
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -218,25 +267,85 @@ document.querySelectorAll('.service-card').forEach(card => {
         return window.innerWidth <= MOBILE_MAX;
     }
 
+    /** Row min-height matches image + expanded panel so we don't reserve a huge fixed gap */
+    function layoutExpandedServiceRow(row) {
+        var body = row.querySelector('.service-card-body');
+        if (!row.classList.contains('service-row--expanded') || !body) {
+            row.style.minHeight = '';
+            return;
+        }
+        var rowRect = row.getBoundingClientRect();
+        var bodyRect = body.getBoundingClientRect();
+        var bottomPad = 2;
+        var needed = Math.ceil(bodyRect.bottom - rowRect.top + bottomPad);
+        row.style.minHeight = needed + 'px';
+    }
+
+    function scheduleLayout(row) {
+        if (!row.classList.contains('service-row--expanded')) return;
+        requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+                layoutExpandedServiceRow(row);
+            });
+        });
+    }
+
+    var resizeTimer;
+    function onResize() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+            document.querySelectorAll('.service-row--expanded').forEach(layoutExpandedServiceRow);
+        }, 100);
+    }
+    window.addEventListener('resize', onResize);
+
     document.querySelectorAll('.service-row').forEach(function(row) {
         var content = row.querySelector('.service-row-content');
         var closeBtn = row.querySelector('.service-details-close');
+        var body = row.querySelector('.service-card-body');
         if (!content) return;
+
+        var ro;
+        if (body && typeof ResizeObserver !== 'undefined') {
+            ro = new ResizeObserver(function() {
+                if (row.classList.contains('service-row--expanded')) layoutExpandedServiceRow(row);
+            });
+        }
 
         content.addEventListener('click', function(e) {
             if (closeBtn && e.target === closeBtn) return;
             if (!isMobile()) return;
             if (row.classList.contains('service-row--expanded')) return;
             row.classList.add('service-row--expanded');
-            document.body.style.overflow = 'hidden';
+            if (ro) ro.observe(body);
+            scheduleLayout(row);
+            setTimeout(function() {
+                layoutExpandedServiceRow(row);
+            }, 100);
         });
 
         if (closeBtn) {
             closeBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                if (ro) ro.unobserve(body);
                 row.classList.remove('service-row--expanded');
-                document.body.style.overflow = '';
+                if (!body) {
+                    row.style.minHeight = '';
+                    return;
+                }
+                /* Keep row min-height until panel finishes collapsing (matches CSS max-height ~0.42s) */
+                var collapseMs = 480;
+                var fallback = setTimeout(function clearRowMinHeight() {
+                    row.style.minHeight = '';
+                }, collapseMs);
+                function onCollapseTransitionEnd(ev) {
+                    if (ev.target !== body || ev.propertyName !== 'max-height') return;
+                    clearTimeout(fallback);
+                    row.style.minHeight = '';
+                    body.removeEventListener('transitionend', onCollapseTransitionEnd);
+                }
+                body.addEventListener('transitionend', onCollapseTransitionEnd);
             });
         }
     });

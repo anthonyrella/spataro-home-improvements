@@ -20,16 +20,26 @@ body {
 }
 
 /* Navigation */
-.navbar {
+.site-header {
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
-    /* background: rgba(225, 225, 225, 0.95); */
-    backdrop-filter: blur(10px);
     z-index: 1000;
-  
-    transition: all 0.3s ease;
+}
 
+.navbar {
+    width: 100%;
+    background: transparent;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar.navbar--past-hero {
+    background: #F5F5F5;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 
 .nav-container {
@@ -72,17 +82,28 @@ body {
     display: flex;
     list-style: none;
     gap: 2rem;
-    margin-left: auto;
-    position: relative;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    right: max(10px, calc((100vw - 1200px) / 2 + 10px));
+    transform: translateY(-50%);
     z-index: 1002;
+    align-items: center;
 }
 
 .nav-link {
     text-decoration: none;
-    color: #2c3e50;
+    color: #2a2a2a;
     font-weight: 500;
     transition: color 0.3s ease;
     position: relative;
+}
+
+@media (min-width: 769px) {
+    nav.navbar.navbar--past-hero + .nav-menu .nav-link {
+        color: #2c3e50;
+    }
 }
 
 .nav-link:hover {
@@ -292,6 +313,16 @@ body {
     border-radius: 8px;
     overflow: visible;
     padding: 0;
+}
+
+/* Wrapper for mobile image+bar; invisible to desktop layout */
+.service-row-media {
+    display: contents;
+}
+
+.service-card-head,
+.service-card-body {
+    display: contents;
 }
 
 .service-row-image {
@@ -827,6 +858,26 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+    .team-photo-desktop-only {
+        display: none;
+    }
+
+    .team-photos {
+        min-height: 0;
+    }
+
+    .team-photos > .team-photo:first-child {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        top: auto;
+        left: auto;
+        margin: 0 auto;
+        aspect-ratio: 4 / 3;
+    }
+}
+
 @media (max-width: 1024px) {
     .service-row {
         min-height: 360px;
@@ -852,12 +903,27 @@ body {
 }
 
 @media (max-width: 768px) {
+    .site-header {
+        padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    /* Keep drawer under the bar + centered logo so open menu does not cover them */
+    nav.navbar {
+        position: relative;
+        z-index: 1002;
+    }
+
+    .nav-link {
+        color: #2c3e50;
+    }
+
     .hamburger {
         display: flex;
         position: absolute;
         right: 20px;
         top: 50%;
         transform: translateY(-50%);
+        z-index: 1003;
     }
 
     .navbar {
@@ -872,22 +938,42 @@ body {
     .nav-menu {
         position: fixed;
         right: -100%;
-        top: 100px;
+        top: var(--site-header-height, 112px);
+        transform: none;
         flex-direction: column;
-        background-color: #E1E1E1;
+        justify-content: flex-start;
+        align-items: center;
+        z-index: 1;
+        background: transparent;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         width: 100%;
         text-align: center;
-        transition: 0.3s;
-        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+        transition: right 0.3s ease, background 0.3s ease, backdrop-filter 0.3s ease,
+            -webkit-backdrop-filter 0.3s ease;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.08);
         padding: 2rem 0;
+    }
+
+    nav.navbar.navbar--past-hero + .nav-menu {
+        background: #F5F5F5;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
     }
 
     .nav-menu.active {
         right: 0;
-        top: 120px;
-        padding-top: 70px;
-        z-index: 0;
-        margin-top: -15px;
+        top: var(--site-header-height, 112px);
+        padding-top: 4.251rem;
+        z-index: 1;
+        margin-top: 0;
+        transition: right 0.3s ease, background 0.3s ease, backdrop-filter 0.3s ease,
+            -webkit-backdrop-filter 0.3s ease, padding-top 0.3s ease;
+    }
+
+    /* After scroll: logo moves to corner (see script.js .scrolled) */
+    nav.navbar:has(.nav-logo-img.scrolled) + .nav-menu.active {
+        padding-top: 1rem;
     }
 
     .nav-logo-img {
@@ -895,6 +981,7 @@ body {
         top: 45%;
         left: 50%;
         transform: translateX(-50%);
+        z-index: 1003;
     }
 
     .nav-logo-img.scrolled {
@@ -950,10 +1037,6 @@ body {
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
     }
 
-    .team-photo-desktop-only {
-        display: none;
-    }
-
     .team-photo {
         min-height: 220px;
     }
@@ -980,7 +1063,20 @@ body {
         padding: 2rem;
     }
 
-    /* Mobile: semi-black overlay bar at bottom of image; full overlay when expanded */
+    /* Mobile: image + bar in media; expanded details below image (not over it) */
+    .service-row-media {
+        display: block;
+        position: relative;
+        height: 240px;
+        border-radius: 8px;
+        overflow: visible;
+    }
+
+    .service-card-head,
+    .service-card-body {
+        display: block;
+    }
+
     .service-row {
         position: relative;
         min-height: 240px;
@@ -1001,7 +1097,7 @@ body {
     }
     .service-row-content {
         position: absolute;
-        bottom: -0.75rem;
+        bottom: 0;
         left: 0;
         right: 0;
         min-height: 0;
@@ -1013,7 +1109,21 @@ body {
         align-items: flex-end;
         justify-content: flex-start;
         box-sizing: border-box;
-        overflow: hidden;
+        /* visible so the panel (absolute; top:100%) isn’t clipped on collapse — overflow:hidden
+           made the card vanish instantly when expanded class was removed */
+        overflow: visible;
+    }
+
+    /* Mobile-only: undo desktop card-left/card-right offsets so all four overlays match */
+    .service-row--card-left .service-row-content,
+    .service-row--card-right .service-row-content {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+        left: 0;
+        right: 0;
+        justify-content: flex-start;
     }
     .service-row-content .service-card {
         background: transparent;
@@ -1022,15 +1132,53 @@ body {
         padding: 0;
         max-width: 100%;
         min-width: 0;
+        /* Inline transform (scroll/hover JS) makes this a containing block and breaks
+           top:100% on .service-card-body — panel must anchor to full overlay bar */
+        transform: none !important;
+    }
+    .service-row-content .service-card:hover {
+        transform: none !important;
+    }
+    /* Icon + title + hint in a tight row (matches desktop branding on small screens) */
+    .service-row-content .service-card-head {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+        column-gap: 0.7rem;
+        row-gap: 0.2rem;
+        align-items: start;
+    }
+    .service-row-content .service-card-head .service-icon {
+        grid-row: 1 / -1;
+        align-self: start;
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        margin-bottom: 0;
+        flex-shrink: 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+    .service-row-content .service-card-head .service-icon i {
+        font-size: 1.05rem;
+    }
+    .service-row-content .service-card-head h3 {
+        grid-column: 2;
+        margin-top: 0;
+    }
+    .service-row-content .service-card-head .service-tap-hint {
+        grid-column: 2;
     }
     .service-row-content .service-card h3 {
         color: #fff;
-        font-size: 1.1rem;
+        font-size: clamp(0.95rem, 2.5vw + 0.65rem, 1.1rem);
+        line-height: 1.25;
         margin-bottom: 0.25rem;
         max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        /* Wrap long titles instead of ellipsis — clearer on small phones */
+        overflow-wrap: break-word;
+    }
+    .service-row--expanded .service-card-head {
+        padding-right: 3rem; /* keep title clear of close (×) */
     }
     .service-tap-hint {
         display: block;
@@ -1039,32 +1187,54 @@ body {
         margin-top: 0.25rem;
         max-width: 100%;
     }
-    .service-row-content .service-icon,
-    .service-row-content .service-card p,
-    .service-row-content .service-card ul {
-        display: none;
+    /* Always out of flow so collapsing max-height never stretches the bar to full image height */
+    .service-row-content .service-card-body {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        margin-top: 0;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition: max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.32s ease,
+            margin-top 0.32s ease;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .service-row-content .service-card-body {
+            transition-duration: 0.01ms !important;
+        }
     }
     .service-details-close {
         display: none;
     }
 
-    /* Expanded: full overlay with scrollable card */
+    /* Expanded: same bar overlay; white card drops below image.
+       Vertical space below the card is set in JS to match actual panel height. */
+    .service-row--expanded {
+        cursor: default;
+    }
     .service-row--expanded .service-row-content {
         position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.94);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        padding: 3.5rem 1.25rem 2rem;
-        align-items: flex-start;
-        justify-content: flex-start;
-        cursor: default;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        height: auto;
+        padding: 1rem 1.25rem;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.4));
+        overflow: visible;
+        margin-left: 0;
+        margin-right: 0;
     }
     .service-row--expanded .service-details-close {
         display: flex;
         position: absolute;
-        top: 1rem;
-        right: 1rem;
+        top: 0.75rem;
+        right: 0.75rem;
         width: 44px;
         height: 44px;
         align-items: center;
@@ -1078,35 +1248,48 @@ body {
         cursor: pointer;
         z-index: 10;
     }
-    .service-row--expanded .service-card {
+    .service-row--expanded .service-card-body {
+        margin-top: 0.5rem;
+        max-height: min(70vh, 32rem);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        opacity: 1;
+        pointer-events: auto;
+        /* Same transition as collapsed state so collapse animates reliably */
+        transition: max-height 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.32s ease,
+            margin-top 0.32s ease;
         background: #fff;
         color: #333;
         padding: 1.5rem 1.25rem;
         border-radius: 8px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         border-top: 4px solid #9dadb7;
-        max-width: 100%;
     }
-    .service-row--expanded .service-card h3 {
-        color: #2c3e50;
-        font-size: 1.25rem;
+    .service-row--expanded .service-card-body p {
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+        color: #666;
+    }
+    .service-row--expanded .service-card-body ul {
+        margin-bottom: 0;
+        list-style: none;
+    }
+    .service-row--expanded .service-card-body li {
+        padding: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+        color: #666;
+    }
+    .service-row--expanded .service-card-body li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #9dadb7;
+        font-weight: bold;
     }
     .service-row--expanded .service-tap-hint {
         display: none;
-    }
-    .service-row--expanded .service-icon {
-        display: flex;
-    }
-    .service-row--expanded .service-card p,
-    .service-row--expanded .service-card ul {
-        display: block;
-    }
-    .service-row--expanded .service-card p {
-        margin-bottom: 1rem;
-        font-size: 0.95rem;
-    }
-    .service-row--expanded .service-card ul {
-        margin-bottom: 0;
     }
 
     .gallery-grid {
@@ -1158,17 +1341,16 @@ body {
         width: 80px;
     }
 
-    .nav-menu.active {
-        right: 0;
-        top: 95px;
-        padding-top: 70px;
-        z-index: 0;
-    }
     .nav-logo-img {
         width: 120px;
         top: 40%;
         left: 50%;
         transform: translateX(-50%);
+    }
+
+    .service-row-content .service-card h3 {
+        font-size: clamp(0.9rem, 4.2vw + 0.55rem, 1.05rem);
+        line-height: 1.3;
     }
 }
 
