@@ -24,6 +24,12 @@ if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', updateMobileSiteHeaderHeight);
 }
 
+function closeMobileNav() {
+    if (hamburger) hamburger.classList.remove('active');
+    if (navMenu) navMenu.classList.remove('active');
+    requestAnimationFrame(updateMobileSiteHeaderHeight);
+}
+
 if (hamburger && navMenu) {
     hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('active');
@@ -33,10 +39,18 @@ if (hamburger && navMenu) {
 }
 
 // Close mobile menu when clicking on a link
-document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
-    if (hamburger) hamburger.classList.remove('active');
-    if (navMenu) navMenu.classList.remove('active');
-}));
+document.querySelectorAll('.nav-link').forEach((n) =>
+    n.addEventListener('click', () => closeMobileNav())
+);
+
+// Mobile: close drawer when tapping outside the menu panel and hamburger (e.g. logo / header bar).
+const mobileNavMq = window.matchMedia('(max-width: 768px)');
+document.addEventListener('pointerdown', (e) => {
+    if (!navMenu || !hamburger || !navMenu.classList.contains('active')) return;
+    if (!mobileNavMq.matches) return;
+    if (navMenu.contains(e.target) || hamburger.contains(e.target)) return;
+    closeMobileNav();
+});
 
 // Logo scroll functionality
 const logo = document.querySelector('.nav-logo-img');

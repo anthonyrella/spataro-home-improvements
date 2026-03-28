@@ -200,7 +200,7 @@ body {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background-image: url('img/hero_edit.jpeg');
+    background-image: url('img/hero_edit_2.jpeg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -1033,8 +1033,14 @@ body {
         padding-top: 4.251rem;
         z-index: 1;
         margin-top: 0;
+        /* Let taps pass through the panel except on links so pointerdown reaches the page and JS can close the drawer. */
+        pointer-events: none;
         transition: right 0.3s ease, background 0.3s ease, backdrop-filter 0.3s ease,
             -webkit-backdrop-filter 0.3s ease, padding-top 0.3s ease;
+    }
+
+    .nav-menu.active .nav-item {
+        pointer-events: auto;
     }
 
     /* Compact header: once .nav-logo-img.scrolled (script.js, scroll > 50px). */
