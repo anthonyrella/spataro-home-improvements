@@ -210,6 +210,13 @@ body {
     margin-top: -60px;
 }
 
+/* iOS WebKit: fixed backgrounds + cover are unreliable; other platforms unchanged. */
+@supports (-webkit-touch-callout: none) {
+    .hero {
+        background-attachment: scroll;
+    }
+}
+
 .hero-content {
     flex: 1;
     max-width: 800px;
