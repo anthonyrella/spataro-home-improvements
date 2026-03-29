@@ -200,7 +200,7 @@ body {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background-image: url('img/hero_edit_3.jpeg');
+    background-image: url('img/hero_edit_3.jpeg?v=20260329a');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
